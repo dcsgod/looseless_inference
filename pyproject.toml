@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "looseless-inference"
+version = "0.1.0"
+description = "Lossless speculative decoding from scratch using Qwen2.5-0.5B (draft) + Qwen2.5-7B-Instruct (target)"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2.0",
+    "transformers>=4.40.0",
+    "accelerate>=0.29.0",
+    "bitsandbytes>=0.43.0",   # 4-bit/8-bit quantization for smaller GPUs
+    "pyyaml>=6.0",
+    "matplotlib>=3.8",
+    "scipy>=1.12",
+    "tqdm>=4.66",
+    "pytest>=8.0",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "huggingface-hub>=0.22",
+    "sentencepiece>=0.2.0",
+]
+
+[project.optional-dependencies]
+dev = ["ipykernel", "jupyter", "black", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "benchmarks*", "tests*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100

@@ -1,0 +1,33 @@
+# ──────────────────────────────────────────────
+# Speculative Decoding — Default Configuration
+# ──────────────────────────────────────────────
+
+models:
+  draft: "Qwen/Qwen2.5-0.5B"
+  target: "Qwen/Qwen2.5-7B-Instruct"
+  # Set to a local path to skip HF download, e.g.:
+  # draft: "/mnt/models/Qwen2.5-0.5B"
+  # target: "/mnt/models/Qwen2.5-7B-Instruct"
+  dtype: "bfloat16"             # bfloat16 | float16 | float32
+  load_in_4bit: true            # true = 4-bit NF4 quant (fits T4/16GB); set false if you have A100/A10G
+  load_in_8bit: false           # set true as alternative to 4bit
+
+device:
+  # "auto" lets accelerate distribute across available GPUs/CPU
+  draft: "auto"
+  target: "auto"
+
+speculative_decoding:
+  K: 4                          # draft tokens per round (tune for your model pair)
+  max_new_tokens: 256
+  temperature: 1.0              # 1.0 = full sampling; 0.0 effectively greedy
+  top_p: 0.9
+  top_k: 50
+  seed: 42
+
+benchmark:
+  prompts_file: "benchmarks/prompts.json"
+  results_dir: "benchmarks/results"
+  num_prompts: 100              # how many prompts from the file to run
+  warmup_prompts: 2             # prompts to discard from timing (GPU warmup)
+  max_new_tokens: 128           # shorter for benchmark throughput measurement
